@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;  /* Horizontally center the map */
+      align-items: center;      /* Vertically center the map */
+      height: 100vh;            /* Full viewport height */
+      background-color: #f5f5f5;
+    }
+    #vis {
+      display: block;
+      max-width: 100%;
+      max-height: 90%;  /* Set max height to avoid overflow */
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.8"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": {
+        "text": "Bushfire Intensity Heatmap of Australia (August 2019 - January 2020)",
+        "anchor": "middle",  // Center the title
+        "fontSize": 18,
+        "fontWeight": "bold",
+        "color": "black"
+      },
+      "width": 1000,
+      "height": 700,
+      "projection": {
+        "type": "equirectangular",
+        "center": [134, -25],
+        "scale": 1050
+      },
+      "layer": [
+        {
+          "mark": "geoshape",
+          "data": {
+            "url": "au-topo.json",
+            "format": {
+              "type": "topojson",
+              "feature": "STE_2021_AUST_GDA94"
+            }
+          },
+          "encoding": {
+            "color": {"value": "#E0E0E0"},
+            "stroke": {"value": "black"},
+            "strokeWidth": {"value": 1}
+          }
+        },
+        {
+          "mark": "circle",
+          "data": {
+            "url": "filtered_fire_data_updated.csv",
+            "format": {
+              "type": "csv"
+            }
+          },
+          "encoding": {
+            "longitude": {"field": "longitude", "type": "quantitative"},
+            "latitude": {"field": "latitude", "type": "quantitative"},
+            "color": {
+              "field": "frp",
+              "type": "quantitative",
+              "scale": {"scheme": "reds"},
+              "title": "Fire Intensity (FRP)"
+            },
+            "size": {
+              "field": "frp",
+              "type": "quantitative",
+              "scale": {"range": [10, 1000]}
+            },
+            "tooltip": [
+              {"field": "frp", "type": "quantitative", "title": "Fire Intensity (FRP)"},
+              {"field": "brightness", "type": "quantitative", "title": "Brightness"},
+              {"field": "confidence", "type": "quantitative", "title": "Confidence (%)"},
+              {"field": "acq_date", "type": "temporal", "title": "Date"}
+            ]
+          }
+        }
+      ]
+    };
+
+    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+</body>
+</html>

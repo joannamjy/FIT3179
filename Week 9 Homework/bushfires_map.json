@@ -1,0 +1,64 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Bushfire Intensity Heatmap of Australia (August 2019 - January 2020)",
+    "anchor": "start",
+    "fontSize": 18,
+    "fontWeight": "bold",
+    "color": "black"
+  },
+  "width": 1000,
+  "height": 700,
+  "projection": {
+    "type": "equirectangular",
+    "center": [134, -25],
+    "scale": 1200
+  },
+  "layer": [
+    {
+      "mark": "geoshape",
+      "data": {
+        "url": "au-topo.json",
+        "format": {
+          "type": "topojson",
+          "feature": "STE_2021_AUST_GDA94"
+        }
+      },
+      "encoding": {
+        "color": {"value": "#E0E0E0"},
+        "stroke": {"value": "black"},
+        "strokeWidth": {"value": 1}
+      }
+    },
+    {
+      "mark": "circle",
+      "data": {
+        "url": "filtered_fire_data_updated.csv",
+        "format": {
+          "type": "csv"
+        }
+      },
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "color": {
+          "field": "frp",
+          "type": "quantitative",
+          "scale": {"scheme": "reds"},
+          "title": "Fire Intensity (FRP)"
+        },
+        "size": {
+          "field": "frp",
+          "type": "quantitative",
+          "scale": {"range": [10, 1000]}
+        },
+        "tooltip": [
+          {"field": "frp", "type": "quantitative", "title": "Fire Intensity (FRP)"},
+          {"field": "brightness", "type": "quantitative", "title": "Brightness"},
+          {"field": "confidence", "type": "quantitative", "title": "Confidence (%)"},
+          {"field": "acq_date", "type": "temporal", "title": "Date"}
+        ]
+      }
+    }
+  ]
+}
