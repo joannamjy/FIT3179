@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Fire Visualizations</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .vis-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1100px;
+        }
+        .vis {
+            width: 48%;
+        }
+        .annotation-box {
+            background-color: #ffebcd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #ff4500;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Impact of the Australian Bushfires (2019-2020)</h1>
+
+    <div class="vis-container">
+        <!-- Bar Chart Visualization -->
+        <div id="vis-bar" class="vis"></div>
+
+        <!-- Heatmap Visualization -->
+        <div id="vis-heatmap" class="vis"></div>
+    </div>
+
+    <script type="text/javascript">
+        // Bar Chart Specification
+        var barChartSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": {
+                "text": "Forest Area Burnt by Forest Tenure and Region",
+                "anchor": "middle",
+                "fontSize": 18,
+                "fontWeight": "bold",
+                "color": "black"
+            },
+            "data": {
+                "url": "Cleaned_Forest_Area_Data__By_Native_Forest_Burnt_Area.csv",
+                "format": {"type": "csv"}
+            },
+            "width": 400,
+            "height": 400,
+            "transform": [
+                {
+                    "fold": ["All", "Australian Capital Territory", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia"],
+                    "as": ["Region", "BurntArea"]
+                },
+                {
+                    "filter": "datum.Region == RegionSelector.Region"
+                }
+            ],
+            "mark": {
+                "type": "bar",
+                "size": 60
+            },
+            "encoding": {
+                "x": {
+                    "field": "Forest tenure",
+                    "type": "nominal",
+                    "title": "Forest Tenure",
+                    "axis": {"labelAngle": -30, "labelFontSize": 14}
+                },
+                "y": {
+                    "field": "BurntArea",
+                    "type": "quantitative",
+                    "title": "Burnt Area (ha)",
+                    "axis": {"labelFontSize": 14, "titleFontSize": 16}
+                },
+                "color": {
+                    "field": "BurntArea",
+                    "type": "quantitative",
+                    "scale": {
+                        "range": ["#FFA07A", "#FF4500", "#8B0000"]
+                    }
+                },
+                "tooltip": [
+                    {"field": "Forest tenure", "type": "nominal", "title": "Forest Tenure"},
+                    {"field": "BurntArea", "type": "quantitative", "title": "Burnt Area (ha)"},
+                    {"field": "Region", "type": "nominal", "title": "State/Region"}
+                ]
+            },
+            "selection": {
+                "RegionSelector": {
+                    "type": "single",
+                    "fields": ["Region"],
+                    "bind": {
+                        "input": "select",
+                        "options": ["All", "Australian Capital Territory", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia"],
+                        "name": "Select Region: "
+                    },
+                    "init": {"Region": "All"}
+                }
+            },
+            "config": {
+                "axis": {
+                    "labelFontSize": 12,
+                    "titleFontSize": 14
+                }
+            }
+        };
+
+        // Heatmap Specification
+        var heatmapSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": {
+                "text": "Bushfire Intensity Heatmap of Australia",
+                "anchor": "middle",
+                "fontSize": 18,
+                "fontWeight": "bold",
+                "color": "black"
+            },
+            "width": 500,
+            "height": 500,
+            "projection": {
+                "type": "equirectangular",
+                "center": [134, -25],
+                "scale": 680
+            },
+            "layer": [
+                {
+                    "mark": "geoshape",
+                    "data": {
+                        "url": "au-topo.json",
+                        "format": {
+                            "type": "topojson",
+                            "feature": "STE_2021_AUST_GDA94"
+                        }
+                    },
+                    "encoding": {
+                        "color": {"value": "#E0E0E0"},
+                        "stroke": {"value": "black"},
+                        "strokeWidth": {"value": 1}
+                    }
+                },
+                {
+                    "mark": "circle",
+                    "data": {
+                        "url": "filtered_fire_data_updated.csv",
+                        "format": {"type": "csv"}
+                    },
+                    "encoding": {
+                        "longitude": {"field": "longitude", "type": "quantitative"},
+                        "latitude": {"field": "latitude", "type": "quantitative"},
+                        "color": {
+                            "field": "frp",
+                            "type": "quantitative",
+                            "scale": {"scheme": "reds"},
+                            "title": "Fire Intensity (FRP)"
+                        },
+                        "size": {
+                            "field": "frp",
+                            "type": "quantitative",
+                            "scale": {"range": [10, 1000]}
+                        },
+                        "tooltip": [
+                            {"field": "frp", "type": "quantitative", "title": "Fire Intensity (FRP)"},
+                            {"field": "brightness", "type": "quantitative", "title": "Brightness"},
+                            {"field": "confidence", "type": "quantitative", "title": "Confidence (%)"},
+                            {"field": "acq_date", "type": "temporal", "title": "Date"}
+                        ]
+                    }
+                }
+            ]
+        };
+
+        // Embed both visualizations
+        vegaEmbed("#vis-bar", barChartSpec);
+        vegaEmbed("#vis-heatmap", heatmapSpec);
+
+    </script>
+</body>
+</html>
