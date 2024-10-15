@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forest Fire Visualizations</title>
+    <title>Forest Fire visualisations</title>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script> <!-- For reading CSV files -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Calistoga&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Voltaire&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=Oswald:wght@200..700&family=Voltaire&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Fredoka', sans-serif;
-            background-color: #f0f4f5;
+            font-family: "Belanosima", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 20px;
+            background-color: white;
             margin: 0;
             padding: 0;
         }
@@ -33,9 +36,10 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
             padding: 50px 0;
             margin: 0;
-            font-family: 'Calistoga', serif;
+            font-family: "Voltaire", sans-serif;
             font-weight: 700;
-            font-size: 50px;
+            font-style: normal;
+            font-size: 55px;
         }
         .chart-container {
             display: flex;
@@ -60,37 +64,149 @@
 <body>
 
     <header>
-        <h1>Visualising the Impact of the 2019-2020 Bushfires</h1>
+        <h1>VISUALISING THE IMPACT OF THE 2019-2020 BUSHFIRES</h1>
     </header>
 
     <!-- Introduction Section -->
-    <section style="max-width: 1000px; margin: 20px auto; display: flex; align-items: flex-start;">
-        <div style="flex: 1; padding-right: 20px; text-align: justify;">
-            <h2 style="font-size: 28px; margin-bottom: 15px; color: #7b0213;">Introduction</h2>
-            <p style="font-size: 18px; line-height: 1.6; color: #333;">
-                The 2019-2020 Australian bushfires, often referred to as "Black Summer," represent one of the most catastrophic natural disasters in the country’s history. These fires scorched over 18 million hectares of land, affecting not only forests but also wildlife, human life, and communities across multiple states.
-            </p>
-            <p style="font-size: 18px; line-height: 1.6; color: #333;">
-                This visual storytelling project aims to explore the effects of the bushfires, from the intensity and spread of the fires to the total forest area burnt. Through data visualisations, we delve into the regions most impacted, revealing the scope of damage to both the land and the creatures inhabiting it.
-            </p>
-        </div>
-        <div style="width: 35%; padding-left: 20px;">
-            <img src="bushfires-koala.jpg" alt="Bushfire Image" style="width: 100%; height: auto; border-radius: 10px;">
+    <section style="max-width: 1000px; margin: 20px auto; text-align: center;">
+        <h2 style="font-size: 40px; margin-bottom: 20px; color: #7b0213;">INTRODUCTION</h2>
+        <div style="display: flex; align-items: flex-start;">
+            <div style="flex: 1; padding-right: 20px; text-align: justify;">
+                <p style="font-size: 20px; line-height: 1.6; color: #333;">
+                    The 2019-2020 Australian bushfires, often referred to as "Black Summer," represent one of the most catastrophic natural disasters in the country’s history. These fires scorched over 18 million hectares of land, affecting not only forests but also wildlife, human life, and communities across multiple states.
+                </p>
+                <p style="font-size: 20px; line-height: 1.6; color: #333;">
+                    This visual storytelling project aims to explore the effects of the bushfires, from the intensity and spread of the fires to the total forest area burnt. Through data visualisations, we delve into the regions most impacted, revealing the scope of damage to both the land and the creatures inhabiting it.
+                </p>
+            </div>
+            <div style="width: 35%; padding-left: 20px;">
+                <img src="bushfires-koala.jpg" alt="Bushfire Image" style="width: 100%; height: auto; border-radius: 10px;">
+            </div>
         </div>
     </section>
 
-    <!-- Heatmap Visualization Section -->
-    <div class="vis-container">
-        <!-- Bar Chart Visualization -->
-        <div id="vis-bar" class="vis"></div>
+    <!-- Heatmap visualisation Section -->
+    <section style="max-width: 1000px; margin: 40px auto; text-align: center;">
+        <h2 style="font-size: 40px; margin-bottom: 20px; color: #7b0213;">BUSHFIRE INTENSITY ACROSS AUSTRALIA</h2>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <!-- Heatmap visualisation -->
+            <div id="vis-heatmap" style="width: 65%;"></div>
+            
+            <!-- Explanatory Text -->
+            <div style="width: 40%; padding-left: 10px; text-align: justify;">
+                <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                    The heatmap visualises the intensity of the 2019-2020 bushfires across Australia. Each circle represents the intensity of fire radiative power (FRP) at different locations, with darker shades indicating higher intensity.
+                </p>
+                <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                    FRP is an important measure that reflects the strength and energy of the fires. By analyzing this visualisation, we can identify the areas that experienced the most severe fires and correlate them with the damage to land and wildlife.
+                </p>
+            </div>
+        </div>
+    </section>
 
-        <!-- Heatmap Visualization -->
+    <!-- Bar Chart visualisation Section -->
+    <section style="max-width: 1000px; margin: 40px auto; text-align: center;">
+        <h2 style="font-size: 40px; margin-bottom: 20px; color: #7b0213;">THE SCALE OF THE DAMAGE</h2>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <!-- Explanatory Text -->
+            <div style="width: 40%; padding-right: 10px; text-align: justify;">
+                <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                    The bar chart shows the total forest area affected by the 2019-2020 bushfires across different regions in Australia. It also categorizes the burnt area based on the type of forest tenure, such as native forest and plantation areas.
+                </p>
+                <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                    Each bar represents the type of forest tenure, and the color intensity indicates the severity of the burnt area. This visualisation helps compare the impact of the bushfires on various forest types in different regions. The dropdown menu provides different overviews of the burnt areas in different states of Australia.
+                </p>
+            </div>
+            
+            <!-- Bar Chart visualisation -->
+            <div id="vis-bar" style="width: 50%;"></div>
+        </div>
+    </section>
+
+    <!-- Line Chart and Pie Chart visualisation Section -->
+    <section style="max-width: 1000px; margin: 40px auto; text-align: center;">
+        <h2 style="font-size: 40px; margin-bottom: 20px; color: #7b0213;">FIRE INCIDENTS AND DAY/NIGHT DISTRIBUTION</h2>
+        
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+            <!-- Line Chart visualisation -->
+            <div id="vis-time-series" style="width: 55%;"></div>
+            
+            <!-- Pie Chart visualisation -->
+            <div id="vis-pie" style="width: 30%;"></div>
+        </div>
+        
+        <!-- Explanatory Text Below the Charts -->
+        <div style="margin-top: 20px; text-align: justify;">
+            <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                The line chart illustrates the number of fire incidents over time during the 2019-2020 bushfires, highlighting day and night occurrences. You can observe the peaks in fire activity and the distribution of incidents across different periods.
+            </p>
+            <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                The pie chart complements this by showing the overall distribution of fire incidents during the day and night. This gives an overview of the proportion of incidents that occurred at different times of the day, providing insights into the challenges faced by emergency responders during various conditions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Stacked Bar Chart visualisation Section -->
+    <section style="max-width: 1000px; margin: 40px auto; text-align: center;">
+        <h2 style="font-size: 40px; margin-bottom: 20px; color: #7b0213;">A DEEPER DIVE INTO THE FOREST TYPES</h2>
+        
+        <!-- Centered Stacked Bar Chart -->
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div id="vis-stacked-bar" style="width: 80%;"></div>
+        </div>
+        
+        <!-- Explanatory Text Below the Chart -->
+        <div style="margin-top: 20px; text-align: justify;">
+            <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                The stacked bar chart compares the total forest area with the burnt forest area across different jurisdictions. This breakdown allows us to see the proportion of land affected by the 2019-2020 bushfires, highlighting the regions that experienced the most severe damage.
+            </p>
+            <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                By filtering between different forest types—such as native, commercial, and other forests—this visualisation provides insights into how the bushfires impacted various types of forest cover across Australia.
+            </p>
+        </div>
+    </section>
+
+    <!-- Metadata Footer Section -->
+    <footer style="background-color: #f2f2f2; padding: 20px 0; text-align: center; margin-top: 40px; margin-bottom: -200px; width: 100vw; position: relative; left: 0; right: 0;">
+        <p style="font-size: 16px; color: #333;">
+            <strong>FIT3179 - Data Visualisation II</strong><br>
+            Designed by: Joanna Moy
+        </p>
+        <p style="font-size: 16px; color: #333;">
+            Datasets acquired from <a href="https://www.agriculture.gov.au/abares/forestsaustralia/forest-data-maps-and-tools/data-by-topic/fire#area-of-forests-in-fire-area-by-forest-category-and-jurisdiction" target="_blank" style="color: #7b0213; text-decoration: none;">
+                Australian Department of Agriculture, Fisheries and Forestry (ABARES)</a> and 
+            <a href="https://www.kaggle.com/datasets/carlosparadis/fires-from-space-australia-and-new-zeland?resource=download" target="_blank" style="color: #7b0213; text-decoration: none;">
+                NASA Satellite Data (MODISC6 and VIIRS)
+            </a>
+        </p>
+        <p style="font-size: 16px; color: #333;">
+            Image by WWF Australia and Backpackers World
+        </p>
+    </footer>
+
+    <!-- Heatmap visualisation Section (Introduction/Overview) -->
+    <div class="vis-container">
         <div id="vis-heatmap" class="vis"></div>
     </div>
 
-    <!-- Time Series Plot Container -->
+    <!-- Bar Chart visualisation (Scale of Damage) -->
+    <div class="vis-container">
+        <div id="vis-bar" class="vis"></div>
+    </div>
+
+    <!-- Time Series Plot Container (Timeline of Events) -->
     <div class="vis-container">
         <div id="vis-time-series" class="vis"></div>
+    </div>
+
+    <!-- Day vs. Night Pie Chart visualisation Section -->
+    <div class="vis-container">
+        <div id="vis-pie" class="vis"></div>
+    </div>
+    
+    <!-- Stacked Bar Chart visualisation Section (Forest Types) -->
+    <div class="vis-container">
+        <div id="vis-stacked-bar" class="vis"></div>
     </div>
 
     <script type="text/javascript">
@@ -102,14 +218,15 @@
                 "anchor": "middle",
                 "fontSize": 18,
                 "fontWeight": "bold",
-                "color": "black"
+                "color": "black",
+                "font": "Belanosima"  // Apply Belanosima font
             },
             "data": {
                 "url": "Cleaned_Forest_Area_Data__By_Native_Forest_Burnt_Area.csv",
                 "format": {"type": "csv"}
             },
-            "width": 400,
-            "height": 400,
+            "width": 350,
+            "height": 350,
             "transform": [
                 {
                     "fold": ["All", "Australian Capital Territory", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia"],
@@ -121,20 +238,20 @@
             ],
             "mark": {
                 "type": "bar",
-                "size": 60
+                "size": 40
             },
             "encoding": {
                 "x": {
                     "field": "Forest tenure",
                     "type": "nominal",
                     "title": "Forest Tenure",
-                    "axis": {"labelAngle": -30, "labelFontSize": 14}
+                    "axis": {"labelAngle": -30, "labelFontSize": 14, "labelFont": "Belanosima", "titleFont": "Belanosima"}  // Apply Belanosima font
                 },
                 "y": {
                     "field": "BurntArea",
                     "type": "quantitative",
                     "title": "Burnt Area (ha)",
-                    "axis": {"labelFontSize": 14, "titleFontSize": 16}
+                    "axis": {"labelFontSize": 14, "titleFontSize": 16, "labelFont": "Belanosima", "titleFont": "Belanosima"}  // Apply Belanosima font
                 },
                 "color": {
                     "field": "BurntArea",
@@ -144,9 +261,9 @@
                     }
                 },
                 "tooltip": [
-                    {"field": "Forest tenure", "type": "nominal", "title": "Forest Tenure"},
-                    {"field": "BurntArea", "type": "quantitative", "title": "Burnt Area (ha)"},
-                    {"field": "Region", "type": "nominal", "title": "State/Region"}
+                    {"field": "Forest tenure", "type": "nominal", "title": "Forest Tenure", "font": "Belanosima"},  // Apply Belanosima font
+                    {"field": "BurntArea", "type": "quantitative", "title": "Burnt Area (ha)", "font": "Belanosima"},  // Apply Belanosima font
+                    {"field": "Region", "type": "nominal", "title": "State/Region", "font": "Belanosima"}  // Apply Belanosima font
                 ]
             },
             "selection": {
@@ -163,16 +280,31 @@
             },
             "config": {
                 "axis": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                    "titleFont": "Belanosima",  // Apply Belanosima font to axis titles
                     "labelFontSize": 12,
                     "titleFontSize": 14
+                },
+                "title": {
+                    "font": "Belanosima",  // Apply Belanosima font to the title
+                    "fontSize": 20
+                },
+                "legend": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                    "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                },
+                "tooltip": {
+                    "font": "Belanosima",  // Apply Belanosima font to tooltips
+                    "fontSize": 12
                 }
             }
         };
-        
-        // Embed both visualizations
+
+        // Embed the bar chart
         vegaEmbed("#vis-bar", barChartSpec);
 
-        // Heatmap Specification
+
+        // Heatmap Specification with Belanosima font applied
         var heatmapSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "title": {
@@ -180,15 +312,16 @@
                 "anchor": "middle",
                 "fontSize": 18,
                 "fontWeight": "bold",
-                "color": "black"
+                "color": "black",
+                "font": "Belanosima"  // Apply Belanosima font to the title
             },
-            "width": 900,
-            "height": 600,
-            "background": "#f0f4f5",
+            "width": 600,
+            "height": 500,
+            "background": "white",
             "projection": {
                 "type": "equirectangular",
                 "center": [134, -25],
-                "scale": 900
+                "scale": 700
             },
             "layer": [
                 {
@@ -219,7 +352,14 @@
                             "field": "frp",
                             "type": "quantitative",
                             "scale": {"scheme": "reds"},
-                            "title": "Fire Intensity (FRP)"
+                            "title": "Fire Intensity (FRP)",
+                            "legend": {
+                                "orient": "top-left",
+                                "offset": 10,
+                                "direction": "vertical",
+                                "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                                "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                            }
                         },
                         "size": {
                             "field": "frp",
@@ -227,63 +367,333 @@
                             "scale": {"range": [10, 1000]}
                         },
                         "tooltip": [
-                            {"field": "frp", "type": "quantitative", "title": "Fire Intensity (FRP)"},
-                            {"field": "brightness", "type": "quantitative", "title": "Brightness"},
-                            {"field": "confidence", "type": "quantitative", "title": "Confidence (%)"},
-                            {"field": "acq_date", "type": "temporal", "title": "Date"}
+                            {"field": "frp", "type": "quantitative", "title": "Fire Intensity (FRP)", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                            {"field": "brightness", "type": "quantitative", "title": "Brightness", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                            {"field": "confidence", "type": "quantitative", "title": "Confidence (%)", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                            {"field": "acq_date", "type": "temporal", "title": "Date", "format": "%y/%m/%d", "font": "Belanosima"}  // Apply Belanosima font to tooltips
                         ]
                     }
                 }
-            ]
+            ],
+            "config": {
+                "axis": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                    "titleFont": "Belanosima",  // Apply Belanosima font to axis titles
+                    "labelFontSize": 12,
+                    "titleFontSize": 14
+                },
+                "title": {
+                    "font": "Belanosima",  // Apply Belanosima font to the title
+                    "fontSize": 20
+                },
+                "legend": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                    "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                },
+                "tooltip": {
+                    "font": "Belanosima",  // Apply Belanosima font to tooltips
+                    "fontSize": 12
+                }
+            }
         };
 
-        // Embed the heatmap visualization
+        // Embed the heatmap visualisation
         vegaEmbed("#vis-heatmap", heatmapSpec);
 
-        // Time Series Specification with slider for date filtering
+
+        // Line Chart Specification with Belanosima font applied
         var timeSeriesSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "description": "Time Series of Fire Detections",
-            "title": "Fire Detections Over Time",
-            "width": 800,
-            "height": 400,
+            "description": "Time Series of Fire Incidents with Day/Night Filter and Date Range Slider",
+            "title": {
+                "text": "Fire Incidents Over Time",
+                "anchor": "middle",
+                "fontSize": 18,
+                "fontWeight": "bold",
+                "color": "black",
+                "font": "Belanosima"  // Apply Belanosima font to the title
+            },
+            "width": 550,
+            "height": 350,
             "data": {
                 "url": "filtered_fire_data_updated.csv",
                 "format": {"type": "csv"}
             },
             "transform": [
-                {"calculate": "year(datum.acq_date)", "as": "year"},
-                {"calculate": "month(datum.acq_date)", "as": "month"}
+                {
+                    "filter": "(DayNightSelector.daynight == 'All' || datum.daynight == DayNightSelector.daynight)"
+                }
             ],
-            "mark": "line",
+            "mark": {
+                "type": "line",
+                "point": true  // Add data points on the chart
+            },
             "encoding": {
                 "x": {
-                    "timeUnit": "yearmonthdate",
                     "field": "acq_date",
                     "type": "temporal",
-                    "title": "Date"
+                    "title": "Date",
+                    "axis": {
+                        "format": "%y/%m/%d",  // Set x-axis to yy/mm/dd format
+                        "grid": false,  // Remove vertical grid lines
+                        "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                        "titleFont": "Belanosima"   // Apply Belanosima font to axis title
+                    }
                 },
                 "y": {
                     "aggregate": "count",
-                    "field": "acq_date",
+                    "field": "*",  // Use * to count all rows (fire incidents)
                     "type": "quantitative",
-                    "title": "Number of Fires Detected"
+                    "title": "Number of Fire Incidents",
+                    "axis": {
+                        "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                        "titleFont": "Belanosima"   // Apply Belanosima font to axis title
+                    }
                 },
-                "color": {"value": "red"}
+                "color": {"value": "#ff5f26"},  // Line color
+                "tooltip": [
+                    {"field": "acq_date", "type": "temporal", "title": "Date", "format": "%y/%m/%d", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                    {"aggregate": "count", "field": "*", "type": "quantitative", "title": "Fire Count", "font": "Belanosima"}  // Apply Belanosima font to tooltips
+                ]
             },
             "selection": {
                 "brush": {
-                    "type": "interval",
-                    "encodings": ["x"]
+                    "type": "interval",  // Define the interval selection on x-axis
+                    "encodings": ["x"],  // The brush (slider) will affect the x-axis
+                    "bind": "scales"     // Apply the brush as a scale binding to the x-axis
+                },
+                "DayNightSelector": {
+                    "type": "single",
+                    "fields": ["daynight"],
+                    "bind": {
+                        "input": "select",
+                        "options": ["All", "D", "N"],  // Use simple values for options
+                        "name": "Select Day or Night: "
+                    },
+                    "init": {"daynight": "All"}
                 }
             },
             "config": {
-                "axis": {"grid": true}
+                "axis": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                    "titleFont": "Belanosima",  // Apply Belanosima font to axis titles
+                    "labelFontSize": 12,
+                    "titleFontSize": 14
+                },
+                "title": {
+                    "font": "Belanosima",  // Apply Belanosima font to the title
+                    "fontSize": 20
+                },
+                "tooltip": {
+                    "font": "Belanosima",  // Apply Belanosima font to tooltips
+                    "fontSize": 12
+                }
             }
         };
 
-        // Embed the time series visualization with slider
+        // Embed the line chart
         vegaEmbed("#vis-time-series", timeSeriesSpec);
-    </script>
+
+
+        // Pie Chart Specification with Belanosima font applied
+        var pieChartSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": {
+                "text": "Day vs. Night Fire Detection",
+                "anchor": "middle",
+                "fontSize": 18,
+                "fontWeight": "bold",
+                "color": "black",
+                "font": "Belanosima"  // Apply Belanosima font to the title
+            },
+            "data": {
+                "url": "filtered_fire_data_updated.csv",
+                "format": {"type": "csv"}
+            },
+            "transform": [
+                {
+                    "aggregate": [{"op": "count", "as": "count"}],
+                    "groupby": ["daynight"]
+                },
+                {
+                    "calculate": "datum.count",  
+                    "as": "countIncidents"
+                },
+                {
+                    "calculate": "datum.daynight == 'D' ? 'Day' : 'Night'",  // Change 'D' to 'Day' and 'N' to 'Night'
+                    "as": "TimeOfDay"
+                },
+                {
+                    "calculate": "datum.countIncidents / (28203 + 7808) * 100",  // Calculate the percentage
+                    "as": "percentage"
+                }
+            ],
+            "layer": [
+                {
+                    "mark": {"type": "arc", "outerRadius": 120},
+                    "encoding": {
+                        "theta": {"field": "countIncidents", "type": "quantitative", "stack": true},
+                        "color": {
+                            "field": "TimeOfDay",  // Use updated field for legend
+                            "type": "nominal",
+                            "scale": {"range": ["#f7c5c4", "#8b0305"]},
+                            "title": "Time of Day",
+                            "legend": {
+                                "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                                "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                            }
+                        },
+                        "tooltip": [
+                            {"field": "TimeOfDay", "type": "nominal", "title": "Time of Day", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                            {"field": "countIncidents", "type": "quantitative", "title": "Fire Incidents", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                            {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".1f", "font": "Belanosima"}  // Apply Belanosima font to tooltips
+                        ]
+                    }
+                }
+            ],
+            "config": {
+                "axis": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                    "titleFont": "Belanosima",  // Apply Belanosima font to axis titles
+                    "labelFontSize": 12,
+                    "titleFontSize": 14
+                },
+                "title": {
+                    "font": "Belanosima",  // Apply Belanosima font to the title
+                    "fontSize": 20
+                },
+                "legend": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                    "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                },
+                "tooltip": {
+                    "font": "Belanosima",  // Apply Belanosima font to tooltips
+                    "fontSize": 12
+                }
+            }
+        };
+
+        // Embed the pie chart
+        vegaEmbed("#vis-pie", pieChartSpec);
+
+
+        // Stacked Bar Chart Specification with Belanosima font applied
+        var stackedBarChartWithDropdownSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": {
+                "text": "Burnt Forest Area vs Total Forest Area",
+                "anchor": "middle",
+                "fontSize": 18,
+                "fontWeight": "bold",
+                "color": "black",
+                "font": "Belanosima"  // Apply Belanosima font to the title
+            },
+            "data": {
+                "url": "Combined_Forest_Area_Data.csv",  // Point to your CSV file
+                "format": {"type": "csv"}
+            },
+            "width": 600,
+            "height": 350,
+            "mark": "bar",
+            "encoding": {
+                "y": {
+                    "field": "Jurisdiction",
+                    "type": "nominal",
+                    "title": "Jurisdiction",
+                    "axis": {
+                        "labelAngle": 0,
+                        "grid": false,  // Remove grid lines on y-axis
+                        "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                        "titleFont": "Belanosima"   // Apply Belanosima font to axis title
+                    }
+                },
+                "x": {
+                    "field": "value",
+                    "type": "quantitative",
+                    "title": "Area (hectares)",
+                    "axis": {
+                        "grid": false,  // Remove grid lines on x-axis
+                        "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                        "titleFont": "Belanosima"   // Apply Belanosima font to axis title
+                    },
+                    "scale": {"domainMin": 0}  // Ensure the x-axis always starts at 0
+                },
+                "color": {
+                    "field": "variable",
+                    "type": "nominal",
+                    "scale": {
+                        "range": ["#f7c5c4", "#8b0305"],  // Non-burnt and Burnt area colors
+                        "domain": {
+                            "signal": "paramForestType == 'All' ? ['Total Forest Area', 'Burnt Forest Area'] : " +
+                                    "paramForestType == 'Native Forest' ? ['Native Forest Area', 'Burnt Native Forest Area'] : " +
+                                    "paramForestType == 'Commercial Forest' ? ['Commercial Forest Area', 'Burnt Commercial Forest Area'] : " +
+                                    "['Other Forest Area', 'Burnt Other Forest Area']"
+                        }
+                    },
+                    "title": "Area Type",
+                    "legend": {
+                        "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                        "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                    }
+                },
+                "tooltip": [
+                    {"field": "Jurisdiction", "type": "nominal", "title": "Jurisdiction", "font": "Belanosima"},  // Apply Belanosima font to tooltips
+                    {"field": "value", "type": "quantitative", "title": "Area (hectares)", "font": "Belanosima"}  // Apply Belanosima font to tooltips
+                ]
+            },
+            "transform": [
+                {
+                    "fold": [
+                        "Total Forest Area", "Burnt Forest Area", 
+                        "Native Forest Area", "Commercial Forest Area", "Other Forest Area",
+                        "Burnt Native Forest Area", "Burnt Commercial Forest Area", "Burnt Other Forest Area"
+                    ],
+                    "as": ["variable", "value"]
+                },
+                {
+                    // Filter based on the forest type selection
+                    "filter": "(paramForestType == 'All' && (datum.variable == 'Total Forest Area' || datum.variable == 'Burnt Forest Area')) || " +
+                            "(paramForestType == 'Native Forest' && (datum.variable == 'Native Forest Area' || datum.variable == 'Burnt Native Forest Area')) || " +
+                            "(paramForestType == 'Commercial Forest' && (datum.variable == 'Commercial Forest Area' || datum.variable == 'Burnt Commercial Forest Area')) || " +
+                            "(paramForestType == 'Other Forest' && (datum.variable == 'Other Forest Area' || datum.variable == 'Burnt Other Forest Area'))"
+                }
+            ],
+            "params": [
+                {
+                    "name": "paramForestType",
+                    "value": "All",
+                    "bind": {
+                        "input": "select",
+                        "options": ["All", "Native Forest", "Commercial Forest", "Other Forest"],
+                        "name": "Select Forest Type: "
+                    }
+                }
+            ],
+            "config": {
+                "axis": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to axis labels
+                    "titleFont": "Belanosima",  // Apply Belanosima font to axis titles
+                    "labelFontSize": 12,
+                    "titleFontSize": 14
+                },
+                "title": {
+                    "font": "Belanosima",  // Apply Belanosima font to the title
+                    "fontSize": 20
+                },
+                "legend": {
+                    "labelFont": "Belanosima",  // Apply Belanosima font to legend labels
+                    "titleFont": "Belanosima"   // Apply Belanosima font to legend title
+                },
+                "tooltip": {
+                    "font": "Belanosima",  // Apply Belanosima font to tooltips
+                    "fontSize": 12
+                }
+            }
+        };
+
+        // Embed the stacked bar chart with dropdown
+        vegaEmbed("#vis-stacked-bar", stackedBarChartWithDropdownSpec);
+
+</script>
 </body>
 </html>
